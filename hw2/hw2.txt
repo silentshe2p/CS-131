@@ -1,0 +1,21 @@
+For convert_grammar, I wrote a helper function called find_rhs that find find list of rules
+starting with a given symbol which is the lhs paramter. The first value of grammar is unchanged
+while compared to hw1, the second value of grammar is a function that takes a nonterminal and
+returns a list of list of symbol. Thus the second value for converted grammar will also be
+a funtion that takes a nonterminal, passes to find_rhs and returns whatever the helper returns.
+
+For parse_prefix, I wrote 2 mutually recursive helper function called matcher and try_prefix.
+The try_prefix's job is matching a single rule with a frag to figure out where is the possible
+prefix. When the rule runs out first or both rule and frag run out at the same time, it's possible
+that a matching prefix is found in previous round of recursion so we just need to pass frag
+(which will be suffix in this case) and derivation to accept and return whatever it returns. If 
+frag runs out first the the rule we trying to match so we return None so that matcher which calls
+try_prefix knows to back out and try other rules. In case the rule r starts with a nonterminal n, we
+call matcher to find within the grammar rules starting with n if there is any rule can match the 
+frag while recursively call try_prefix on the remaining of r. Last case, if the rule r starts with a
+terminal t, check if the t is the first symbol in frag then recursively call try_prefix on the 
+remaining of r else return None.
+On the other hand, the matcher tries to find within a set of starting rules a rule that can match a
+prefix for frag. It calls try_prefix on each rule of that set while saving the path in derv argument. 
+
+This approach uses a lot of recursion so it's not fast. 
